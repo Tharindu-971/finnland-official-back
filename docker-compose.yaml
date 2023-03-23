@@ -1,0 +1,40 @@
+version: '3.3'
+services:
+  db:
+    image: mysql:5.7
+    container_name: mysql_db_official
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'finlandb'
+      MYSQL_USER: 'finnlanadmin'
+      MYSQL_PASSWORD: 'Official@tech'
+      MYSQL_ROOT_PASSWORD: 'root@toor#321'
+    ports:
+      - '3309:3306'
+    expose:
+      - '3309'
+    volumes:
+      - /home/myVm/dataOfficial/:/var/lib/mysql
+
+  backend:
+    image: frinlan-official
+    build: .
+    ports:
+      - '8083:8080'
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:mysql://mysql_db_official:3306/finlandb?useSSL=false'
+      SPRING_DATASOURCE_USERNAME: 'finnlanadmin'
+      SPRING_DATASOURCE_PASSWORD: 'Official@tech'
+    expose:
+      - '8083'
+    depends_on:
+      - "db"
+
+  frontend:
+    image: frinlan-frontend-official
+    build: ../frinlen-front
+    ports:
+      - '3003:80'
+    expose:
+      - '80'
+
